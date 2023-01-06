@@ -23,7 +23,6 @@ def upload_image(request):
             return redirect('/')    
     
 
-    
 class ImageElementDetectionView(TemplateView):
     template_name = 'image_element_detection.html'
     
@@ -36,6 +35,9 @@ class ImageElementDetectionView(TemplateView):
             image_path = os.path.join('media', str(image_to_process.image_before))
             coordinates = get_coordinates(image_path)
             
+            if not os.path.exists('media/images/processings'):
+                os.makedirs('media/images/processings')
+                
             with open('media/images/processings/' + id + '.txt', 'w') as f:
                 for coordinate in coordinates:
                     f.write(str(coordinate) + '\n')
