@@ -1,0 +1,14 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+
+  <main class="px-3">
+    <img src="{{ image }}" alt="image" width="70%">
+    <p></p>
+  </main>
+  <div>
+    <p></p>
+    <a href="{{ image }}" download="{{ image }}" class="btn btn-md btn-secondary fw-bold border-white bg-black" aria-current="page">ᐁ Cкачать</a>  
+  </div>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block content %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
+
+<main class="px-3">
+
+<p align="center">
+  <canvas id="canvas" align="center"></canvas>
+</p>
+
+
+<script>
+var canvas = new fabric.Canvas('canvas');
+var img = new Image();
+img.src = '{{ image }}';
+img.onload = function() {
+  canvas.setWidth(img.width);
+  canvas.setHeight(img.height);
+  canvas.setBackgroundImage(img.src, canvas.renderAll.bind(canvas));
+  };
+
+document.addEventListener('keydown', function(event) {
+  if (event.key == 'Delete') {
+    var activeObject = canvas.getActiveObject();
+    if (activeObject) {
+      canvas.remove(activeObject);
+    }
+  }
+});
+
+canvas.on('mouse:dblclick', function(options) {
+  var activeObject = canvas.getActiveObject();
+  if (activeObject) {
+    canvas.remove(activeObject);
+  }
+});
+function removeAll() {
+  var objects = canvas.getObjects();
+  for (var i = 0; i < objects.length; i++) {
+    if (objects[i].type == 'rect' || objects[i].type == 'image') {
+      canvas.remove(objects[i]);
+    }
+  }
+}
+function fillRectsWithSample(){
+  var cords = '{{ coordinates }}';
+  var cords = JSON.parse(cords);
+  var img = new Image();
+  img.src = getRandomString();
+  img.onload = function () {
+    for (var i = 0; i < cords.length; i++) {
+      var img_ = new fabric.Image(img, {
+        left: cords[i][0],
+        top: cords[i][1],
+        selectable: true,
+        hasControls: true,
+        hasBorders: false
+      });
+      img_.scaleToWidth(cords[i][2]);
+      img_.scaleToHeight(cords[i][3]);
+      canvas.add(img_);
+      img_.sendToBack();
+    }
+  };
+}
+function addSampleImage() {
+  var img = new Image();
+  img.src = getRandomString();
+  img.onload = function () {
+      var img_ = new fabric.Image(img, {
+          left: 30,
+          top: 30,
+          selectable: true,
+          hasControls: true,
+          hasBorders: false
+      });
+      img_.scaleToWidth(120);
+      canvas.add(img_);
+      img_.sendToBack();
+  };
+}
+function getRandomString() {
+  var sample = '{{ sample }}'.split(',');
+  var random_string = sample[Math.floor(Math.random() * sample.length)];
+  return random_string;
+}
+function saveImage() {
+  var objects = canvas.getObjects();
+  var cords = [];
+  for (var i = 0; i < objects.length; i++) {
+    if (objects[i].type == 'rect' || objects[i].type == 'image') {
+      cords.push([objects[i].left, objects[i].top, objects[i].width, objects[i].height]);
+    }
+  }
+  var cords = JSON.stringify(cords);
+  var url = '{{ url }}';
+  var image = canvas.toDataURL();
+  var data = {
+    'image_after': image
+  };
+  console.log(data);
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data: data,
+    success: function (data) {
+      window.location.href
+    }
+  });
+}
+
+fillRectsWithSample();
+saveImage();
+</script>
+<p class="lead">Вы можете перемещать объекты, добавлять новые, изменять их размер. <br>Для удаления конкретного объекта - дважды кликните <strong>ЛКМ</strong>, либо нажмите <strong>del</strong>.<br></p>
+<p></p>
+<button onclick="addSampleImage()" type="button" class="btn btn-secondary btn-sm">Добавить объект</button>
+<button onclick="removeAll()" type="button" class="btn btn-secondary btn-sm">Удалить все объекты</button>
+<p></p>
+<a href="{{ final_url }}" onclick="saveImage()" class="btn btn-md btn-secondary fw-bold border-white bg-black" aria-current="page">Сохранить и перейти <br />далее ᐅ</a>
+</main>
+
+{% endblock %}

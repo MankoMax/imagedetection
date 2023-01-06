@@ -1,0 +1,41 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block content %}
+
+
+<link href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+        rel="stylesheet" />
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+    </script>
+    <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js">
+    </script>
+    
+    <script src={% static 'progressbar.js' %}></script>
+
+
+
+  <main class="px-3">
+    <h1>Загрузите фото</h1>
+    <p class="lead">Добавьте ваше фото, которое содержит пропагандистскую символику.</p>
+      <form action="upload_image/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="image_before" id="image">
+        <button type="submit" onclick="ajaxClick()" class="btn btn-md btn-secondary fw-bold border-white bg-black">Загрузить</button>
+      </form>
+
+      <div class="container py-3">
+        <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="load" style="width:0%">
+          0%
+        </div>
+      </div>
+    
+  </main>
+
+{% endblock %}
