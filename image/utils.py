@@ -14,6 +14,7 @@ def get_coordinates(image):
                             contrast_ths=0.2, adjust_contrast=0.8, 
                             allowlist='ZV', text_threshold=0.7, 
                             mag_ratio=2, detail=1, paragraph=False)
+        
         if len(text) == 0:
             pass
         else:

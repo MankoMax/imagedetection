@@ -54,7 +54,6 @@ class ImageElementDetectionView(TemplateView):
             sample_images = []
             for file in os.listdir('media/images/samples'):
                 sample_images.append(str('/media/images/samples/' + file))
-                
             random.shuffle(sample_images)
                 
             context['sample'] = ','.join(sample_images)
