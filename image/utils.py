@@ -13,7 +13,7 @@ def get_coordinates(image):
         text = reader.readtext(image2, rotation_info=[30, 45, 90, 180, 270], 
                             contrast_ths=0.2, adjust_contrast=0.8, 
                             allowlist='ZV', text_threshold=0.7, 
-                            mag_ratio=2, detail=1, paragraph=False)
+                            mag_ratio=2, detail=1, paragraph=False, batch_size=3)
         
         if len(text) == 0:
             pass
