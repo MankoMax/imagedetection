@@ -25,7 +25,7 @@
     <p class="lead">Добавьте ваше фото, которое содержит пропагандистскую символику.</p>
       <form action="upload_image/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="image_before" id="image">
+        <input type="file" name="image_before" id="image" accept="image/png, image/jpeg">
         <button type="submit" onclick="ajaxClick()" class="btn btn-md btn-secondary fw-bold border-white bg-black">Загрузить</button>
       </form>
 

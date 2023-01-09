@@ -3,6 +3,7 @@ from django.views.generic import TemplateView, CreateView
 from .models import Image
 import os
 import base64
+import random
 from .utils import get_coordinates, get_coordinates_for_bounding_box
 
 
@@ -37,15 +38,23 @@ class ImageElementDetectionView(TemplateView):
             
             if not os.path.exists('media/images/processings'):
                 os.makedirs('media/images/processings')
+            
+            if coordinates == None:
+                coordinates = []
                 
             with open('media/images/processings/' + id + '.txt', 'w') as f:
                 for coordinate in coordinates:
                     f.write(str(coordinate) + '\n')
             
             list_of_coordinates = get_coordinates_for_bounding_box('media/images/processings/' + id + '.txt')
+            for coordinate in list_of_coordinates:
+                if coordinate[0] < 0:
+                    coordinate[0].remove()
+                    
             sample_images = []
             for file in os.listdir('media/images/samples'):
                 sample_images.append(str('/media/images/samples/' + file))
+            random.shuffle(sample_images)
                 
             context['sample'] = ','.join(sample_images)
             context['coordinates'] = list_of_coordinates
