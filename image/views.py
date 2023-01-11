@@ -7,8 +7,6 @@ import random
 from .utils import get_coordinates, get_coordinates_for_bounding_box
 
 
-
-
 class HomeView(TemplateView):
     template_name = 'upload_image.html'
     
@@ -44,7 +42,9 @@ class ImageElementDetectionView(TemplateView):
                 
             with open('media/images/processings/' + id + '.txt', 'w') as f:
                 for coordinate in coordinates:
-                    f.write(str(coordinate) + '\n')
+                    str_to_check = coordinate.__str__().replace(')', '').split(',')
+                    if float(str_to_check[9].removeprefix(' ')) > 0.7:
+                        f.write(str(coordinate) + '\n')
             
             list_of_coordinates = get_coordinates_for_bounding_box('media/images/processings/' + id + '.txt')
             for coordinate in list_of_coordinates:
@@ -55,7 +55,8 @@ class ImageElementDetectionView(TemplateView):
             for file in os.listdir('media/images/samples'):
                 sample_images.append(str('/media/images/samples/' + file))
             random.shuffle(sample_images)
-                
+            
+            context['random_sample'] = random.choice(sample_images)
             context['sample'] = ','.join(sample_images)
             context['coordinates'] = list_of_coordinates
             context['image'] = image_to_process.image_before.url

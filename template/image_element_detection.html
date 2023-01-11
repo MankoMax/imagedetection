@@ -40,6 +40,7 @@ canvas.on('mouse:dblclick', function(options) {
     canvas.remove(activeObject);
   }
 });
+
 function removeAll() {
   var objects = canvas.getObjects();
   for (var i = 0; i < objects.length; i++) {
@@ -53,7 +54,7 @@ function fillRectsWithSample(){
   var cords = '{{ coordinates }}';
   var cords = JSON.parse(cords);
   var img = new Image();
-  img.src = getRandomString();
+  img.src = '{{ random_sample }}';
   img.onload = function () {
     for (var i = 0; i < cords.length; i++) {
       var img_ = new fabric.Image(img, {
@@ -63,6 +64,7 @@ function fillRectsWithSample(){
         hasControls: true,
         hasBorders: false
       });
+      console.log(img_.src);
       img_.scaleToWidth(cords[i][2]);
       img_.scaleToHeight(cords[i][3]);
       canvas.add(img_);
@@ -87,11 +89,13 @@ function addSampleImage() {
       img_.sendToBack();
   };
 }
+
 function getRandomString() {
   var sample = '{{ sample }}'.split(',');
   var random_string = sample[Math.floor(Math.random() * sample.length)];
   return random_string;
 }
+
 function saveImage() {
   var objects = canvas.getObjects();
   var cords = [];
@@ -118,6 +122,7 @@ function saveImage() {
 }
 
 fillRectsWithSample();
+
 saveImage();
 </script>
 <p class="lead">Вы можете перемещать объекты, добавлять новые, изменять их размер. <br>Для удаления конкретного объекта - дважды кликните <strong>ЛКМ</strong>, либо нажмите <strong>del</strong>.<br></p>
