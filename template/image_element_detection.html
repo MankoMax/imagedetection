@@ -18,7 +18,9 @@
 <script>
 var canvas = new fabric.Canvas('canvas');
 var img = new Image();
+
 img.src = '{{ image }}';
+
 img.onload = function() {
   canvas.setWidth(img.width);
   canvas.setHeight(img.height);
